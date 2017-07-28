@@ -1,0 +1,11 @@
+{% extends "bootstrap/base.html" %}
+{% block title %}Dash Board{% endblock %}
+
+{% block navbar %}
+{{nav.mynavbar_login.render()}}
+{% endblock %}
+
+{% block content %}
+  <h1>Dash Board</h1>
+  <h1>Hello! - {{ name }}
+{% endblock %}

@@ -1,0 +1,5 @@
+*.pyc
+flask
+flask_bootstrap
+db_repository
+database.db
