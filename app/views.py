@@ -1,7 +1,7 @@
 from flask import Flask,render_template, redirect, url_for
 from flask_bootstrap import Bootstrap
 from app import app, db, models,login_manager
-from forms import LoginForm, RegisterForm
+from forms import LoginForm, RegisterForm,QuestionForm
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import login_user, login_required, logout_user,current_user
 @login_manager.user_loader
@@ -44,10 +44,30 @@ def signup():
 @app.route('/dashboard')
 @login_required
 def dashboard():
-    return render_template('dashboard.html',name = current_user.username)
+    questions = models.Question.query.filter_by(user_id = current_user.id).all()
+    return render_template('dashboard.html',name = current_user.username, questions = questions)
 
 @app.route('/logout')
 @login_required
 def logout():
     logout_user()
     return redirect(url_for('index'))
+
+@app.route('/postquestion', methods=['GET', 'POST'])
+@login_required
+def postquestion():
+    form = QuestionForm()
+    if form.validate_on_submit():
+        new_question = models.Question(title=form.title.data, description=form.description.data, user_id = current_user.id)
+        db.session.add(new_question)
+        db.session.commit()
+        return '<h1>New question has been added!</h1>'
+    return render_template('postquestion.html', form = form)
+
+
+@app.route('/question/<question_id>')
+@login_required
+def question(question_id):
+    question = models.Question.query.filter_by(id = question_id).first()
+    owner = question.owner.username
+    return render_template('question.html', owner=owner, question=question)

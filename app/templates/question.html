@@ -1,5 +1,5 @@
 {% extends "bootstrap/base.html" %}
-{% block title %}Dash Board{% endblock %}
+{% block title %}{{ question.title }}{% endblock %}
 
 {% block navbar %}
 {{nav.mynavbar_login.render()}}
@@ -7,14 +7,11 @@
 
 {% block content %}
 <div class="container">
-  <h1>Dash Board</h1>
-  <h1>Hello, Welcome back to Flaskr! ——— {{ name }}</h1><br>
   <div class="row-fluid">
   		<div class="span12">
-        {% for question in questions %}
+        <h4>This Question was created by user:<code>&lt;{{ owner }}&gt;</code></h4>
         <h3>{{ question.title }} </h3>
         <p>{{ question.description }}</p>
-        {% endfor %}
   		</div>
   	</div>
 </div>

@@ -1,0 +1,20 @@
+{% extends "bootstrap/base.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+{% block title %}Post a question{% endblock %}
+
+{% block navbar %}
+{{nav.mynavbar_login.render()}}
+{% endblock %}
+
+{% block content %}
+<div class="container">
+  <form class="form-postquestion" method="post" action="/postquestion">
+    <h1>Hello, Welcome to <code>&lt;Flaskr&gt;</code></h1>
+    <h1>In here you can post any question you want.</h1>
+    {{ form.hidden_tag() }}
+    {{ wtf.form_field(form.title) }}
+    {{ wtf.form_field(form.description) }}
+    <button class="btn btn-lg btn-primary btn-block" type="submit">POST</button>
+  </form>
+</div>
+{% endblock %}

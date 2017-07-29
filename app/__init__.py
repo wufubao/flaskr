@@ -22,6 +22,7 @@ def mynavbar():
         'Flaskr',
         View('Home', 'index'),
         View('Dashboard', 'dashboard'),
+        View('Question', 'postquestion'),
         View('Sign up', 'signup'),
     )
 
