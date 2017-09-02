@@ -10,7 +10,8 @@ def load_user(user_id):
 
 
 @app.route('/')
-def index():
+@app.route('/newindex')
+def new_index():
     return render_template('newindex.html')
 
 @app.route('/index')

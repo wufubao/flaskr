@@ -77,16 +77,12 @@
         </text>
     </svg>
 </div>
-<p>滚动了 <span>0</span> 次。</p>
-<div>
-    <button>test</button>
-</div>
 </body>
 <script>
     $(document).ready(function () {
-        $("div").scroll(function () {
-            $("span").text(x += 1);
-        });
-    });
+        $(window).scroll(function () {
+            window.location.href="http:127.0.0.1:5000/index";
+        })
+    })
 </script>
 </html>
