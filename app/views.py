@@ -75,3 +75,7 @@ def question(question_id):
     question = models.Question.query.filter_by(id = question_id).first()
     owner = question.owner.username
     return render_template('question.html', owner=owner, question=question)
+
+@app.errorhandler(404) 
+def page_not_found(error): 
+    return render_template('error/404.html'), 404

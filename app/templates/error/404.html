@@ -1,0 +1,133 @@
+<html>
+  <head>
+    <title>Page Not found</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+<style>
+html, body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  background: #2c3e50;
+}
+h1.text{
+  text-align:center;
+  color:#ffdf8f;
+}
+.wrapper{
+  text-align:center;
+  padding: 8em 1.667em;
+  color: #fff;
+}
+#cloud {
+  margin-top:300px;
+  margin-left:50px;
+  width:250px;
+  height:150px;
+  position:absolute;
+  -webkit-animation:'cloud' 5s linear infinite;
+}
+#cloud * {
+  position:absolute;
+  background:#FFF;
+  border-radius:50%;
+  box-shadow:0px 5px 0px #6695B0;
+  text-indent:-99999px;
+}
+#cloud .one {
+  left:60px;
+  top:30px;
+  width:128px;
+  height:128px;
+}
+#cloud .two {
+  left:20px;
+  top:76px;
+  width:82px;
+  height:82px;
+}
+#cloud .thr {
+  left:155px;
+  top:94px;
+  width:64px;
+  height:64px;
+}
+#cloud .fou {
+  left:56px;
+  top:118px;
+  width:135px;
+  height:40px;
+  border-radius:0;
+}
+
+@-webkit-keyframes cloud {
+  0% { margin-left:50px;}
+  50% { margin-left:150px; }
+  100% { margin-left:50px; }
+}
+.background-up{
+  margin-top:-10px;
+  margin-left:-10px;
+  position:absolute;
+  float: top;
+  width:110%;
+  height:200px;
+  background: #66b4e2;
+}
+.gayhub-div{
+  float:right;
+  margin-right: 150px;
+}
+p.gayhub-text{
+  margin-top:100px;
+  font-size: 50px;
+  position:absolute;
+  color: #fff;
+}
+</style>
+  </head>
+  <div class="background-up"></div>
+  <div class="container">
+    <div id="cloud">
+      <div class="one"></div>
+      <div class="two"></div>
+      <div class="thr"></div>
+      <div class="fou"></div>
+    </div>
+      <div class="wrapper">
+        <div class="col-xs-6 col-md-offset-3" id="top-text">
+
+          <h1 class="text">Oops! Seems we got lost :(</h1>
+          <p>And we found that 404</p>
+          <p><a type="button" class="btn btn-success btn-lg btn-block" href="index">Go back to the HOME page!</a></p>
+        </div>
+    </div>
+    <div class="gayhub-div">
+    <p class="gayhub-text">GAYHUB</p></div>
+  </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script type="text/javascript">
+    $(document).ready(function(){
+      $(window).mousemove(function(e){
+        var h = $(window).height()
+        var w = $(window).width()
+        var xx = (e.originalEvent.x || e.originalEvent.layerX || 0);
+        var yy = (e.originalEvent.y || e.originalEvent.layerY || 0);
+        var top_text_xx = ((xx-w/2)/w)*10
+        var top_text_yy = ((yy-h/2)/h)*10
+        var cloud_xx = ((xx-w/2)/w)*15
+        var cloud_yy = ((yy-h/2)/h)*15
+        var bg_up_xx = -((xx-w/2)/w)*10
+        var bg_up_yy = -((yy-h/2)/h)*10
+        var gayhub_text_xx = -((xx-w/2)/w)*15
+        var gayhub_text_yy = -((yy-h/2)/h)*15
+        $("#top-text").css("transform", "translate(" + top_text_xx + "px"+", " +top_text_yy+"px)");
+        $("#cloud").css("transform", "translate(" + cloud_xx + "px"+", " +cloud_yy+"px)");
+        $(".background-up").css("transform", "translate(" + bg_up_xx + "px"+", " +bg_up_yy+"px)");
+        $(".gayhub-text").css("transform", "translate(" + gayhub_text_xx + "px"+", " +gayhub_text_yy+"px)");
+      })
+    })
+    </script>
+  </body>
+</html>
