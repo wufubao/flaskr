@@ -171,11 +171,13 @@
 <script>
     $(document).ready(function () {
         $(window).scroll(function () {
+          if ($(document).scrollTop() >= $(document).height() - $(window).height()) {
             $(".mouse").slideUp("fast",function(){
                 $(".spinner").slideDown("fast")
                 $(this).delay(2000)
                 window.location.href="index";
             })
+          }
         })
     })
 </script>
