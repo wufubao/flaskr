@@ -58,6 +58,90 @@
                 stroke-dashoffset: -400;
             }
         }
+        .spinner {
+          width: 60px;
+          height: 60px;
+          position: relative;
+          margin: 100px auto;
+        }
+
+        .double-bounce1, .double-bounce2 {
+          width: 100%;
+          height: 100%;
+          border-radius: 50%;
+          background-color: #67CF22;
+          opacity: 0.6;
+          position: absolute;
+          top: 0;
+          left: 0;
+          -webkit-animation: bounce 2.0s infinite ease-in-out;
+          animation: bounce 2.0s infinite ease-in-out;
+        }
+
+        .double-bounce2 {
+          -webkit-animation-delay: -1.0s;
+          animation-delay: -1.0s;
+        }
+
+        @-webkit-keyframes bounce {
+          0%, 100% { -webkit-transform: scale(0.0) }
+          50% { -webkit-transform: scale(1.0) }
+        }
+
+        @keyframes bounce {
+          0%, 100% {
+            transform: scale(0.0);
+            -webkit-transform: scale(0.0);
+          } 50% {
+            transform: scale(1.0);
+            -webkit-transform: scale(1.0);
+          }
+        }
+        .mouse {
+            display: block;
+            margin: 6px auto;
+            width: 0px;
+            height: px;
+            border: 50px solid;
+            border-color: #67CF22 transparent transparent transparent;
+
+            -webkit-animation-duration: 1s;
+            animation-duration: 1s;
+            -webkit-animation-fill-mode: both;
+            animation-fill-mode: both;
+            -webkit-animation-iteration-count: infinite;
+            animation-iteration-count: infinite;
+            -webkit-animation-name: scroll;
+            animation-name: scroll;
+          }
+
+        @-webkit-keyframes scroll {
+          0% {
+            opacity: 1;
+            -webkit-transform: translateY(0);
+            transform: translateY(0);
+          }
+          100% {
+            opacity: 0;
+            -webkit-transform: translateY(12px);
+            transform: translateY(12px);
+          }
+        }
+
+        @keyframes scroll {
+          0% {
+            opacity: 1;
+            -webkit-transform: translateY(0);
+            -ms-transform: translateY(0);
+            transform: translateY(0);
+          }
+          100% {
+            opacity: 0;
+            -webkit-transform: translateY(12px);
+            -ms-transform: translateY(12px);
+            transform: translateY(12px);
+          }
+        }
     </style>
 </head>
 <body>
@@ -77,11 +161,21 @@
         </text>
     </svg>
 </div>
+<div class="mouse">
+</div>
+<div class="spinner" style="display: none">
+  <div class="double-bounce1"></div>
+  <div class="double-bounce2"></div>
+</div>
 </body>
 <script>
     $(document).ready(function () {
         $(window).scroll(function () {
-            window.location.href="http:127.0.0.1:5000/index";
+            $(".mouse").slideUp("fast",function(){
+                $(".spinner").slideDown("fast")
+                $(this).delay(2000)
+                window.location.href="index";
+            })
         })
     })
 </script>
