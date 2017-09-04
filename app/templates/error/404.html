@@ -67,10 +67,9 @@ h1.text{
 }
 .background-up{
   margin-top:-10px;
-  margin-left:-10px;
   position:absolute;
   float: top;
-  width:110%;
+  width:100%;
   height:200px;
   background: #66b4e2;
 }
@@ -124,7 +123,7 @@ p.gayhub-text{
         var gayhub_text_yy = -((yy-h/2)/h)*15
         $("#top-text").css("transform", "translate(" + top_text_xx + "px"+", " +top_text_yy+"px)");
         $("#cloud").css("transform", "translate(" + cloud_xx + "px"+", " +cloud_yy+"px)");
-        $(".background-up").css("transform", "translate(" + bg_up_xx + "px"+", " +bg_up_yy+"px)");
+        $(".background-up").css("transform", "translateY("+bg_up_yy+"px)");
         $(".gayhub-text").css("transform", "translate(" + gayhub_text_xx + "px"+", " +gayhub_text_yy+"px)");
       })
     })
