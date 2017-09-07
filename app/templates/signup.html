@@ -12,10 +12,106 @@
         {{ wtf.form_field(form.username) }}
         {{ wtf.form_field(form.email) }}
         {{ wtf.form_field(form.password) }}
-        <button class="btn btn-lg btn-primary btn-block" type="submit">Sign up</button>
+        <div class="form-group">
+          <div id="embed-captcha" width="100%"></div>
+          <div id="wait" class="progress progress-striped active">
+	           <div class="progress-bar progress-bar-success" role="progressbar"
+		           aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"
+		             style="width: 100%;">
+	           </div>
+          </div>
+          <!-- <p id="notice" class="hide">Please drag the pattern to the right position.</p> -->
+        </div>
+        <div class="form-group">
+          <button class="btn btn-lg btn-primary btn-block" type="submit">Sign up</button>
+        </div>
       </form>
     </div>
   </div>
 
+{% endblock %}
 
+{% block scripts %}
+<script src="{{bootstrap_find_resource('jquery.js', cdn='jquery')}}"></script>
+<script src="{{bootstrap_find_resource('js/bootstrap.js', cdn='bootstrap')}}"></script>
+<script src="/static/gt.js"></script>
+<script>
+function addErr(obj, msg="Please fill here!"){
+  obj.parent().addClass("has-error")
+  obj.after('<p class=\"help-block\">'+msg+'</p>')
+}
+function isErrAdded(obj){
+  return obj.parent().hasClass("has-error")
+}
+function removeErr(obj){
+  obj.parent().removeClass("has-error")
+  obj.next().remove()
+}
+function ErrOp(obj, msg="Please fill here"){
+  if(!obj.val() & !isErrAdded(obj))
+    addErr(obj, msg)
+  if(obj.val() & isErrAdded(obj))
+    removeErr(obj)
+}
+$(document).ready(function(){
+  // var elements = document.getElementById('username')
+  // elements.oninvalid = function(e){
+  //   e.target.setCustomValidity("");
+  //   if (!e.target.validity.valid) {
+  //       e.target.setCustomValidity("This field cannot be left blank");
+  //   }
+  // }
+  $("#username").change(function(){
+    ErrOp($(this))
+  })
+  $("#email").change(function(){
+    ErrOp($(this))
+    ErrOp($("#username"))
+  })
+  $("#password").change(function(){
+    ErrOp($(this))
+    ErrOp($("#username"))
+    ErrOp($("#email"))
+  })
+  var handlerEmbed = function (captchaObj) {
+      $("#embed-submit").click(function (e) {
+          var validate = captchaObj.getValidate();
+          if (!validate) {
+              $("#notice")[0].className = "show";
+              setTimeout(function () {
+                  $("#notice")[0].className = "hide";
+              }, 2000);
+              e.preventDefault();
+          }
+      });
+      // 将验证码加到id为captcha的元素里，同时会有三个input的值：geetest_challenge, geetest_validate, geetest_seccode
+      captchaObj.appendTo("#embed-captcha");
+      captchaObj.onReady(function () {
+          $("#wait")[0].className = "hide";
+      });
+      // 更多接口参考：http://www.geetest.com/install/sections/idx-client-sdk.html
+  };
+  $.ajax({
+      // 获取id，challenge，success（是否启用failback）
+      url: "/user_gay_id/register?t=" + (new Date()).getTime(), // 加随机数防止缓存
+      type: "get",
+      dataType: "json",
+      success: function (data) {
+          // 使用initGeetest接口
+          // 参数1：配置参数
+          // 参数2：回调，回调的第一个参数验证码对象，之后可以使用它做appendTo之类的事件
+          initGeetest({
+              gt: data.gt,
+              challenge: data.challenge,
+              product: "embed", // 产品形式，包括：float，embed，popup。注意只对PC版验证码有效
+              offline: !data.success, // 表示用户后台检测极验服务器是否宕机，一般不需要关注
+              width: '100%',
+              lang: 'en',
+              protocol:'https://'
+              // 更多配置参数请参见：http://www.geetest.com/install/sections/idx-client-sdk.html#config
+          }, handlerEmbed);
+      }
+  });
+})
+</script>
 {% endblock %}

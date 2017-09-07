@@ -1,13 +1,14 @@
-from flask import Flask,render_template, redirect, url_for
+from flask import Flask,render_template, redirect, url_for, request, session
 from flask_bootstrap import Bootstrap
 from app import app, db, models,login_manager
 from forms import LoginForm, RegisterForm,QuestionForm
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import login_user, login_required, logout_user,current_user
+from geetest import GeetestLib
+from config import pc_geetest_id, pc_geetest_key
 @login_manager.user_loader
 def load_user(user_id):
     return models.User.query.get(int(user_id))
-
 
 @app.route('/')
 @app.route('/newindex')
@@ -37,12 +38,23 @@ def login():
 def signup():
     form =RegisterForm()
     if form.validate_on_submit():
-        hash_password = generate_password_hash(form.password.data, method='sha256')
-        new_user = models.User(username=form.username.data, email=form.email.data, password=hash_password)
-        db.session.add(new_user)
-        db.session.commit()
-        return "<h1>New user has been created</h1>"
-        # return '<h1>'+form.username.data+' '+form.email.data+' '+form.password.data+'</h1>'
+        gt = GeetestLib(pc_geetest_id, pc_geetest_key)
+        challenge = request.form[gt.FN_CHALLENGE]
+        validate = request.form[gt.FN_VALIDATE]
+        seccode = request.form[gt.FN_SECCODE]
+        status = session[gt.GT_STATUS_SESSION_KEY]
+        user_gay_id = session["user_gay_id"]
+        if status:
+            result = gt.success_validate(challenge, validate, seccode, user_gay_id)
+        else:
+            result = gt.failback_validate(challenge, validate, seccode)
+        if(result):
+            hash_password = generate_password_hash(form.password.data, method='sha256')
+            new_user = models.User(username=form.username.data, email=form.email.data, password=hash_password)
+            db.session.add(new_user)
+            db.session.commit()
+            return "<h1>New user has been created</h1>"
+            # return '<h1>'+form.username.data+' '+form.email.data+' '+form.password.data+'</h1>'
     return render_template('signup.html',form = form)
 
 @app.route('/dashboard')
@@ -68,7 +80,6 @@ def postquestion():
         return '<h1>New question has been added!</h1>'
     return render_template('postquestion.html', form = form)
 
-
 @app.route('/question/<question_id>')
 @login_required
 def question(question_id):
@@ -76,6 +87,16 @@ def question(question_id):
     owner = question.owner.username
     return render_template('question.html', owner=owner, question=question)
 
-@app.errorhandler(404) 
-def page_not_found(error): 
+@app.route('/user_gay_id/register', methods=["GET"])
+def get_pc_captcha():
+    user_gay_id = 'goodgay'
+    gt = GeetestLib(pc_geetest_id, pc_geetest_key)
+    status = gt.pre_process(user_gay_id)
+    session[gt.GT_STATUS_SESSION_KEY] = status
+    session["user_gay_id"] = user_gay_id
+    response_str = gt.get_response_str()
+    return response_str
+
+@app.errorhandler(404)
+def page_not_found(error):
     return render_template('error/404.html'), 404
